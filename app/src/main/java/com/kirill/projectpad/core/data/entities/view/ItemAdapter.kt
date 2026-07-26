@@ -7,11 +7,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kirill.projectpad.R
 
-class ItemAdapter(private val items: List<Item>) :
-    RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+class ItemAdapter(
+    private val items: List<Item>,
+    private val onItemClick: OnItemClickListener
+) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+
+    interface OnItemClickListener {
+        fun onItemClick(item: Item)
+    }
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
         val tvTitle: TextView = view.findViewById(R.id.tvTitle)
         val tvDescription: TextView = view.findViewById(R.id.tvDescription)
     }
@@ -26,6 +31,10 @@ class ItemAdapter(private val items: List<Item>) :
         val item = items[position]
         holder.tvTitle.text = item.title
         holder.tvDescription.text = item.description
+
+        holder.itemView.setOnClickListener {
+            onItemClick.onItemClick(item)
+        }
     }
 
     override fun getItemCount() = items.size

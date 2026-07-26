@@ -26,20 +26,20 @@ import java.util.List;
 /**
  * Entity that responsible for saving and loading objects from memory
  */
-public class Save_module extends AppCompatActivity {
+public final class Save_module extends AppCompatActivity {
 
     public static String saveFileName;
     private final File saveFile = new File(saveFileName);
     private final Project_serializer serializer = INSTANCE;
 
     /**
-     * Save tasks in file by writing to memory
+     * Save projects in file by writing to memory
      */
-    void save_books() {
+    public void save_projects() {
         try {
             if (saveFile.length() != 0) {
                 if (saveFile.delete()) {
-                    save_books();
+                    save_projects();
                 } else {
                     Toast.makeText(this, "Error in delete save file", Toast.LENGTH_SHORT).show();
                 }
@@ -56,16 +56,16 @@ public class Save_module extends AppCompatActivity {
             }
             writer.close();
         } catch (IOException e) {
-//            Toast.makeText(MainActivity.taskList.getContext(), R.string.SaveError, Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.recyclerView.getContext(), "Error in saving", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            Toast.makeText(MainActivity.taskList.getContext(), "Error in save module", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.recyclerView.getContext(), "Error in save module", Toast.LENGTH_SHORT).show();
         }
     }
 
     /**
-     * Load tasks directly from memory
+     * Load projects directly from memory
      */
-    void load_books_array() {
+    public void load_projects_array() {
         try {
             if (saveFile.length() != 0L && saveFile.exists()) {
                 BufferedReader reader = new BufferedReader(new FileReader(saveFile));
@@ -73,11 +73,11 @@ public class Save_module extends AppCompatActivity {
                 load_savefile(reader);
             }
         } catch (IOException e) {
-//            Toast.makeText(MainActivity.taskList.getContext(), R.string.LoadError, Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.recyclerView.getContext(), "Error in loading projects", Toast.LENGTH_SHORT).show();
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////
+    /// /////////////////////////////////////////////////////////////////////////
 
     private void load_savefile(@NonNull BufferedReader reader) {
         int increment = 0;
@@ -94,8 +94,7 @@ public class Save_module extends AppCompatActivity {
             } while (increment < file_list.size());
             reader.close();
         } catch (IOException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
-//            Toast.makeText(MainActivity.taskList.getContext(), R.string.LoadError, Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.recyclerView.getContext(), "Error in load save file", Toast.LENGTH_SHORT).show();
         }
     }
 }

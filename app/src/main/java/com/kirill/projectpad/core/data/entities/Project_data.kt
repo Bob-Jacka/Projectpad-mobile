@@ -1,4 +1,4 @@
-package com.kirill.projectpad.core.entities
+package com.kirill.projectpad.core.data.entities
 
 /**
  * Class containing book data to transmit or save

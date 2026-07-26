@@ -21,6 +21,12 @@
         android:theme="@style/Theme.ProjectPad"
         tools:targetApi="31">
         <activity
+            android:name=".pages.Change_project"
+            android:exported="false" />
+        <activity
+            android:name=".pages.DetailedProjectView"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"

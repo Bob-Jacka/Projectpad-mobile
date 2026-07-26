@@ -1,6 +1,7 @@
 package com.kirill.projectpad.core.entities
 
 import com.google.gson.Gson
+import com.kirill.projectpad.core.data.entities.Project_data
 
 
 /**

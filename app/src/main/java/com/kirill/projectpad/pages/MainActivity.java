@@ -3,14 +3,10 @@ package com.kirill.projectpad.pages;
 import static com.kirill.projectpad.core.data.Global_settings.SAVE_FILE_NAME;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
     public Save_module save_module;
     private ItemAdapter adapter;
     private Net_worker net_worker;
-
-    private int exit = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,20 +67,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        ++exit;
-        switch (exit) {
-            case 1:
-                Toast.makeText(this, "Press back one more time to exit", Toast.LENGTH_SHORT).show();
-                break;
-            case 2:
-                finishAffinity();
-                super.onBackPressed();
-                break;
-        }
-    }
-
-    @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         addMenu(menu, v);
@@ -99,17 +79,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addMenu(ContextMenu menu, View v) {
-//        if (INSTANCE.getTransports()[transportBlocks.indexOfChild(v)] == null) {
-//            menu.setHeaderTitle(R.string.Add);
-//            menu.add(R.string.Transport);
-//            menu.add(R.string.MetroMap);
-//            menu.add(R.string.Close);
-//        } else {
-//            menu.setHeaderTitle(R.string.Transport2);
-//            menu.add(R.string.Delete);
-//            menu.add(R.string.Change);
-//            menu.add(R.string.Close);
-//        }
+        menu.setHeaderTitle("Actions with project:");
+        menu.add("Open");
+        menu.add("Delete");
+        menu.add("Close");
     }
 
     private void chooseItem(MenuItem item) {
@@ -118,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
             case "Delete":
             case "Удалить":
                 break;
-            case "Change":
-            case "Изменить":
+            case "Open":
+            case "Открыть":
                 break;
         }
     }

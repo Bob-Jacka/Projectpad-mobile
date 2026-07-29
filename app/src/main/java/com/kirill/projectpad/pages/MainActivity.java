@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("StaticFieldLeak")
     public static RecyclerView recyclerView;
+
     public Save_module save_module;
     private ItemAdapter adapter;
     private Net_worker net_worker;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Global_settings.full_path_to_save = getApplicationContext().getFilesDir().getAbsolutePath() + SAVE_FILE_NAME;
 
         save_module = new Save_module();
         recyclerView = findViewById(R.id.recyclerView);
@@ -44,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
         net_worker = new Net_worker();
 
         save_module.load_projects_array();
-
-        Global_settings.full_path_to_save = getApplicationContext().getFilesDir().getAbsolutePath() + SAVE_FILE_NAME;
 
         List<Item> items = new ArrayList<>();
         //TODO load items from local storage and create items

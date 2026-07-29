@@ -35,7 +35,7 @@ android {
     }
 
     buildFeatures {
-        compose = true
+        compose = false
     }
     kotlinOptions {
         jvmTarget = "17"
@@ -43,9 +43,8 @@ android {
 }
 
 dependencies {
-
-    // ИСПРАВЛЕНО: Добавлен BOM для основного приложения, чтобы версии Compose не конфликтовали
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material3)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -53,12 +52,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
 
-    // НЮАНС: Если вы используете ConstraintLayout ВНУТРИ Compose, раскомментируйте строчку ниже
-    // и убедитесь, что добавили "constraintlayout-compose = "1.1.1"" в libs.versions.toml
-    // implementation("androidx.constraintlayout:constraintlayout-compose:1.1.1")
-
-    // Если вам нужен обычный XML ConstraintLayout (например для старых фрагментов), оставьте эту:
-     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.constraintlayout)
     implementation(libs.core.ktx)
 
     implementation(libs.gson)

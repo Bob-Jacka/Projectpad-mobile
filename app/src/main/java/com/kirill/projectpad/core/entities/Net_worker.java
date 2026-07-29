@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.kirill.projectpad.pages.MainActivity;
+
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -39,10 +41,10 @@ public final class Net_worker extends AppCompatActivity {
                     new Handler(Looper.getMainLooper()).post(() -> {
                     });
                 } else {
-                    Toast.makeText(null, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.recyclerView.getContext(), "Error: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             } catch (IOException e) {
-                Toast.makeText(null, "Network error: " + e, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.recyclerView.getContext(), "Network error: " + e, Toast.LENGTH_SHORT).show();
                 new Handler(Looper.getMainLooper()).post(() -> {
                 });
             }
@@ -69,7 +71,7 @@ public final class Net_worker extends AppCompatActivity {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                Toast.makeText(null, "Unexpected code: " + response, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.recyclerView.getContext(), "Unexpected code: " + response, Toast.LENGTH_SHORT).show();
             }
             String body = response.body().string();
             System.out.println("Response: " + body);
@@ -96,7 +98,7 @@ public final class Net_worker extends AppCompatActivity {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                Toast.makeText(null, "Unexpected code " + response, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.recyclerView.getContext(), "Unexpected code " + response, Toast.LENGTH_SHORT).show();
             }
             System.out.println(response.body().string());
         }

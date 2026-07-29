@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.ProjectPad" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Base.Theme.ProjectPad" parent="Theme.Material3.DayNight.NoActionBar">
+    </style>
+    <style name="Theme.ProjectPad" parent="Theme.Material3.Light.NoActionBar" />
 </resources>

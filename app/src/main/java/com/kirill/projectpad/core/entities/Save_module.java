@@ -1,7 +1,7 @@
 package com.kirill.projectpad.core.entities;
 
-import static com.kirill.projectpad.core.data.Global_settings.projects;
 import static com.kirill.projectpad.core.data.Global_settings.empty_line;
+import static com.kirill.projectpad.core.data.Global_settings.projects;
 import static com.kirill.projectpad.core.entities.Project_serializer.INSTANCE;
 
 import android.widget.Toast;
@@ -9,7 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kirill.projectpad.R;
+import com.kirill.projectpad.core.data.Global_settings;
 import com.kirill.projectpad.core.data.entities.Project_data;
 import com.kirill.projectpad.pages.MainActivity;
 
@@ -28,8 +28,7 @@ import java.util.List;
  */
 public final class Save_module extends AppCompatActivity {
 
-    public static String saveFileName;
-    private final File saveFile = new File(saveFileName);
+    private final File saveFile = new File(Global_settings.full_path_to_save);
     private final Project_serializer serializer = INSTANCE;
 
     /**

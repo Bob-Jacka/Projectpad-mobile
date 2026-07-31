@@ -1,19 +1,31 @@
 package com.kirill.projectpad.core.data.entities
 
 /**
- * Class containing book data to transmit or save
+ * Class containing project data to transmit or save
  */
-class Project_data {
+data class Entity(
+    var project_name: String,
+    val type: String,
+    var description: String = ""
+) {
 
-    private lateinit var project_name: String
-    private var description: String? = null
-
-    constructor() {
-        //
+    fun get_name(): String {
+        return project_name
     }
 
-    constructor(project_name: String, description: String? = null) {
-        this.project_name = project_name
-        this.description = description
+    fun get_description(): String {
+        return description ?: ""
+    }
+
+    fun set_name(new_name: String) {
+        this.project_name = new_name
+    }
+
+    fun set_description(new_description: String) {
+        this.description = new_description
+    }
+
+    fun get_type(): String {
+        return type
     }
 }

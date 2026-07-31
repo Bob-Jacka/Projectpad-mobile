@@ -11,10 +11,10 @@ android {
 
     defaultConfig {
         applicationId = "com.kirill.projectpad"
-        minSdk = 26 // ИСПРАВЛЕНО: Позволит ставить приложение на Android 8.0+
+        minSdk = 33
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -53,7 +53,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
 
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.core.ktx)
 
     implementation(libs.gson)
     implementation(libs.okhttp)

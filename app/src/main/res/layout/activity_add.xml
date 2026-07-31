@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".pages.ChangeProject">
+    tools:context=".pages.AddActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,6 +16,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/Type_tx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Entity type" />
+
+        <Button
+            android:id="@+id/Choose_type_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hold to choose" />
 
         <TextView
             android:id="@+id/Entity_name_tv"
@@ -45,10 +57,9 @@
             android:inputType="textMultiLine" />
 
         <Button
-            android:id="@+id/Change_project_btn"
+            android:id="@+id/Add_project_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Apply changes" />
+            android:text="Add project" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

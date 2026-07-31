@@ -1,7 +1,7 @@
 package com.kirill.projectpad.core.entities
 
 import com.google.gson.Gson
-import com.kirill.projectpad.core.data.entities.Project_data
+import com.kirill.projectpad.core.data.entities.Entity
 
 
 /**
@@ -14,14 +14,14 @@ object Project_serializer {
     /**
      * Convert from object into bite stream
      */
-    fun book_serialize(project_data: Project_data): String {
-        return gson.toJson(project_data)
+    fun entity_serialize(entity_data: Entity): String {
+        return gson.toJson(entity_data)
     }
 
     /**
      * Convert from bite stream into book data object
      */
-    fun book_deserialize(string: String): Project_data {
-        return gson.fromJson(string, Project_data::class.java)
+    fun entity_deserialize(string: String): Entity {
+        return gson.fromJson(string, Entity::class.java)
     }
 }

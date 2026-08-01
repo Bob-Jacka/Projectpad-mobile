@@ -47,12 +47,13 @@ class Net_worker private constructor() {
                     }
                 }
             } catch (e: IOException) {
-                Toast.makeText(
-                    MainActivity.recyclerView.context,
-                    "Network error: $e",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Handler(Looper.getMainLooper()).post {}
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(
+                        MainActivity.recyclerView.context,
+                        "Network error: $e",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }.start()
     }

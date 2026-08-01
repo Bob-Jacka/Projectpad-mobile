@@ -1,10 +1,12 @@
 package com.kirill.projectpad.pages
 
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -45,6 +47,9 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 0)
+
+        manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         full_path_to_save = applicationContext.filesDir.absolutePath + SAVE_FILE_NAME
         init_page_entities()
 
@@ -53,6 +58,22 @@ class MainActivity : AppCompatActivity() {
         }
 
         add_callbacks()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            manager.createNotificationChannel(channel)
+        }
     }
 
     override fun onStop() {
@@ -94,8 +115,15 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
+            //remove project view from app
             "Delete" -> {
+                items.removeAt(active_project_idx)
                 entities.removeAt(active_project_idx)
+                adapter.notifyItemRemoved(active_project_idx)
+                if (entities.isEmpty()) {
+                    transmit_button.visibility = View.INVISIBLE
+                }
+                save_module.save_projects()
                 true
             }
 
@@ -112,14 +140,6 @@ class MainActivity : AppCompatActivity() {
         add_button = findViewById(R.id.Add_btn)
         transmit_button = findViewById(R.id.Transmit_btn)
         net_worker_module = Net_worker.instance
-
-        val channel = NotificationChannel(
-            CHANNEL_ID,
-            CHANNEL_NAME,
-            NotificationManager.IMPORTANCE_DEFAULT
-        )
-        manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        manager.createNotificationChannel(channel)
 
         adapter = ItemAdapter(items)
         recyclerView.setLayoutManager(LinearLayoutManager(this))

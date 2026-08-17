@@ -1,7 +1,7 @@
 package com.kirill.projectpad.core.data.entities
 
 /**
- * Class containing project data to transmit or save
+ * Class containing project data (or other data, such as idea) to transmit or save
  */
 data class Entity(
     var project_name: String,

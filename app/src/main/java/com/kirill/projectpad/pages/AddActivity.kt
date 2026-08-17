@@ -19,6 +19,7 @@ import com.kirill.projectpad.R
 import com.kirill.projectpad.core.data.entities.Entity
 import com.kirill.projectpad.pages.MainActivity.Companion.entities
 
+//Activity for adding project
 class AddActivity : AppCompatActivity() {
 
     private lateinit var type_btn: Button

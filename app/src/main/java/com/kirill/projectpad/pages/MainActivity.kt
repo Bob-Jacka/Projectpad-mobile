@@ -17,14 +17,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kirill.projectpad.R
 import com.kirill.projectpad.core.data.entities.Entity
+import com.kirill.projectpad.core.data.entities.before_next_entity
 import com.kirill.projectpad.core.data.entities.view.Item
 import com.kirill.projectpad.core.data.entities.view.ItemAdapter
 import com.kirill.projectpad.core.entities.Net_worker
+import com.kirill.projectpad.core.entities.Project_serializer
 import com.kirill.projectpad.core.entities.Save_module
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var manager: NotificationManager
     private var items: MutableList<Item> = ArrayList()
+    private var is_api_connected: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,7 +100,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        active_project_idx = recyclerView.indexOfChild(block_view)
+        active_project_idx = project_view.indexOfChild(block_view)
         return when (item.title) {
             //Open detailed project view
             "Open" -> {
@@ -136,15 +144,15 @@ class MainActivity : AppCompatActivity() {
      */
     private fun init_page_entities() {
         save_module = Save_module()
-        recyclerView = findViewById(R.id.Project_view)
+        project_view = findViewById(R.id.Project_view)
         add_button = findViewById(R.id.Add_btn)
         transmit_button = findViewById(R.id.Transmit_btn)
         net_worker_module = Net_worker.instance
 
         adapter = ItemAdapter(items)
-        recyclerView.setLayoutManager(LinearLayoutManager(this))
-        recyclerView.setAdapter(adapter)
-        registerForContextMenu(recyclerView)
+        project_view.setLayoutManager(LinearLayoutManager(this))
+        project_view.setAdapter(adapter)
+        registerForContextMenu(project_view)
         save_module.load_projects_array()
         if (entities.isEmpty()) {
             transmit_button.visibility = View.INVISIBLE
@@ -180,12 +188,68 @@ class MainActivity : AppCompatActivity() {
                     .setContentText("Connecting to api")
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .build()
+
                 manager.notify(1, notification)
                 Toast.makeText(this, "Connecting to api", Toast.LENGTH_SHORT).show()
-                net_worker_module.connect_to_api()
+                net_worker_module.connect_to_api(
+                    onSuccess = {
+                        runOnUiThread {
+                            Toast.makeText(
+                                this,
+                                "Successful connect to api with optional body: $it",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            is_api_connected = true
+                            onSuccessApiConnect()
+                        }
+                    },
+                    onError = {
+                        runOnUiThread {
+                            Toast.makeText(this, "Failed to connect to api", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    })
+
+
             } else {
-                Toast.makeText(this, "Check your internet connection", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Check your internet connection", Toast.LENGTH_SHORT)
+                    .show()
             }
+        }
+    }
+
+    fun onSuccessApiConnect() {
+        val post_job = lifecycleScope.launch(start = CoroutineStart.LAZY) {
+            delay(2.seconds) //delay before start
+            //run on all entities and post them to desktop
+            entities.forEach {
+                net_worker_module.post_project_data(
+                    serializer.entity_serialize(
+                        it
+                    ),
+                    onSuccess = {
+                        runOnUiThread {
+                            Toast.makeText(
+                                project_view.context,
+                                "Successful transmit data",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    },
+                    onError = {
+                        runOnUiThread {
+                            Toast.makeText(
+                                project_view.context,
+                                "Failed to transmit entity",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
+            }
+            delay(before_next_entity)
+        }
+        if (is_api_connected) {
+            post_job.start()
         }
     }
 
@@ -193,7 +257,10 @@ class MainActivity : AppCompatActivity() {
     companion object {
         @JvmStatic
         @SuppressLint("StaticFieldLeak")
-        lateinit var recyclerView: RecyclerView
+        lateinit var project_view: RecyclerView
+
+        @JvmStatic
+        val serializer: Project_serializer = Project_serializer
 
         @JvmStatic
         @SuppressLint("StaticFieldLeak")

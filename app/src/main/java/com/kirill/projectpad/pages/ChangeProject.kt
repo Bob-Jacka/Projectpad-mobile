@@ -39,7 +39,7 @@ class ChangeProject : AppCompatActivity() {
 
         //init current object and init page
         active_obj = entities[active_project_idx].also {
-            project_name_tx.setText(it.project_name)
+            project_name_tx.setText(it.title)
             project_description_tx.setText(it.description)
         }
     }

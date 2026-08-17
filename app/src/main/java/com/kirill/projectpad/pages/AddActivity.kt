@@ -72,7 +72,8 @@ class AddActivity : AppCompatActivity() {
             val project_name = project_name_tx.text.toString()
             val project_description: String = project_description_tx.text.toString()
 
-            val entity = Entity(project_name, type, project_description)
+            val entity =
+                Entity(title = project_name, type = type, description = project_description)
             entities.add(entity)
             MainActivity.save_module.save_projects()
             startActivity(Intent(this, MainActivity::class.java))

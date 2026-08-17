@@ -15,6 +15,8 @@ import java.io.IOException
  * Main class to interact with api on desktop client
  */
 class Net_worker private constructor() {
+    var is_api_connected: Boolean = false
+
     private object Rest_paths {
         const val POST_PATH: String = "mobile_connect"
         const val GET_PATH_REPLICA: String = ""

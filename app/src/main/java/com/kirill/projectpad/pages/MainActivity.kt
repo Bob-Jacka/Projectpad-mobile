@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var manager: NotificationManager
     private var items: MutableList<Item> = ArrayList()
-    private var is_api_connected: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -191,6 +190,9 @@ class MainActivity : AppCompatActivity() {
 
                 manager.notify(1, notification)
                 Toast.makeText(this, "Connecting to api", Toast.LENGTH_SHORT).show()
+                if (net_worker_module.is_api_connected) {
+                    onSuccessApiConnect()
+                }
                 net_worker_module.connect_to_api(
                     onSuccess = {
                         runOnUiThread {
@@ -199,7 +201,7 @@ class MainActivity : AppCompatActivity() {
                                 "Successful connect to api with optional body: $it",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            is_api_connected = true
+                            net_worker_module.is_api_connected = true
                             onSuccessApiConnect()
                         }
                     },
@@ -207,10 +209,9 @@ class MainActivity : AppCompatActivity() {
                         runOnUiThread {
                             Toast.makeText(this, "Failed to connect to api", Toast.LENGTH_SHORT)
                                 .show()
+                            net_worker_module.is_api_connected = false
                         }
                     })
-
-
             } else {
                 Toast.makeText(this, "Check your internet connection", Toast.LENGTH_SHORT)
                     .show()
@@ -219,13 +220,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onSuccessApiConnect() {
-        val post_job = lifecycleScope.launch(start = CoroutineStart.LAZY) {
-            delay(2.seconds) //delay before start
+        lifecycleScope.launch(start = CoroutineStart.DEFAULT) {
+            delay(3.seconds) //delay before start
             //run on all entities and post them to desktop
-            entities.forEach {
+            val indices_to_remove = mutableListOf<Int>()
+
+            entities.forEachIndexed { index, entity ->
                 net_worker_module.post_project_data(
                     serializer.entity_serialize(
-                        it
+                        entity
                     ),
                     onSuccess = {
                         runOnUiThread {
@@ -234,6 +237,7 @@ class MainActivity : AppCompatActivity() {
                                 "Successful transmit data",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            indices_to_remove.add(index)
                         }
                     },
                     onError = {
@@ -245,11 +249,16 @@ class MainActivity : AppCompatActivity() {
                             ).show()
                         }
                     })
+                delay(before_next_entity)
             }
-            delay(before_next_entity)
-        }
-        if (is_api_connected) {
-            post_job.start()
+            runOnUiThread {
+                for (index in indices_to_remove.reversed()) {
+                    items.removeAt(index)
+                    entities.removeAt(index)
+                    adapter.notifyItemRemoved(index)
+                }
+                transmit_button.visibility = View.INVISIBLE
+            }
         }
     }
 

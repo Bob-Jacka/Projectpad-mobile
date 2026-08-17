@@ -31,7 +31,7 @@ class DetailedProjectView : AppCompatActivity() {
         type_et = findViewById(R.id.Type_et)
 
         entities[active_project_idx].let {
-            title_et.setText(it.project_name)
+            title_et.setText(it.title)
             description_et.setText(it.description)
             type_et.setText(it.type)
         }

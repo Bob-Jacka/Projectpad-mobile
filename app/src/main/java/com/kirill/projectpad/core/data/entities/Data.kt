@@ -4,4 +4,4 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 ///wait time before post next entity
-val before_next_entity: Duration = 5.seconds
+val before_next_entity: Duration = 3.seconds
